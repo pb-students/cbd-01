@@ -5,7 +5,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     '@nuxt/ui',
-    '@hebilicious/authjs-nuxt'
+    '@hebilicious/authjs-nuxt',
+    '@vueuse/nuxt'
   ],
 
   // Auth
