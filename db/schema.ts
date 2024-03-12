@@ -4,7 +4,8 @@ import { z } from 'zod'
 
 export const messageSchema = z.object({
   userId: z.number(),
-  message: z.string()
+  message: z.string(),
+  updatedAt: z.date()
 })
 
 export const canEditSchema = z.object({
@@ -12,14 +13,10 @@ export const canEditSchema = z.object({
   messageId: z.number()
 })
 
-export const credentialsSchema = z.object({
-  username: z.string(),
-  password: z.string()
-})
-
 export const userSchema = z.object({
   id: z.number(),
-  username: z.string()
+  username: z.string(),
+  password: z.string()
 })
 
 export const users = sqliteTable('users', {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { credentialsSchema } from '~/db/schema'
+import { userSchema } from '~/db/schema'
 import { z } from 'zod'
 
 import type { FormSubmitEvent } from '#ui/types'
@@ -8,6 +8,11 @@ const { signIn, user } = useAuth()
 
 const router = useRouter()
 if (user.value) router.replace('/')
+
+const credentialsSchema = userSchema.pick({
+  username: true,
+  password: true
+})
 
 type Credentials = z.infer<typeof credentialsSchema>
 

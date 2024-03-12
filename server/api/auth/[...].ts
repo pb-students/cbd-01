@@ -1,10 +1,15 @@
 import CredentialsProvider from '@auth/core/providers/credentials'
 import type { AuthConfig, User } from '@auth/core/types'
 import { NuxtAuthHandler } from '#auth'
-import { db, users, credentialsSchema, userSchema } from '~/db'
+import { db, users, userSchema } from '~/db'
 import { eq } from 'drizzle-orm'
 
 const runtimeConfig = useRuntimeConfig()
+
+const credentialsSchema = userSchema.pick({
+  username: true,
+  password: true
+})
 
 export const authOptions: AuthConfig = {
   secret: runtimeConfig.authJs.secret,
