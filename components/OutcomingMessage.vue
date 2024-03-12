@@ -3,9 +3,9 @@ const props = defineProps(['message'])
 const emit = defineEmits(['updateMessage', 'deleteMessage'])
 // TODO: fetch users from the backend
 const users = reactive([
-  { id: 1, username: 'Ula Kużelewska' },
-  { id: 2, username: 'Mateusz Daniel' },
-  { id: 3, username: 'Kasper Serweryn' }
+  { id: 1, username: 'Ula Kużelewska', canEdit: false },
+  { id: 2, username: 'Mateusz Daniel', canEdit: false },
+  { id: 3, username: 'Kasper Serweryn', canEdit: false }
 ])
 
 const user = computed(() => users.find((user) => user.id === props.message.userId))
