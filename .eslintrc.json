@@ -1,0 +1,7 @@
+{
+  "extends": [
+    "standard",
+    "@nuxt/eslint-config"
+  ],
+  "root": true
+}

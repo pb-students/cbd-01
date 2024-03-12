@@ -1,5 +1,22 @@
+import { resolve } from 'path'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui'],
-  devtools: { enabled: true }
+  devtools: { enabled: true },
+  modules: [
+    '@nuxt/ui',
+    '@hebilicious/authjs-nuxt'
+  ],
+
+  // Auth
+  alias: { cookie: resolve(__dirname, 'node_modules/cookie') },
+  runtimeConfig: {
+    authJs: { secret: '+U9t4zM9A10FJhJvO0tBGNeSqA/KG8Ap5P93rzkWqhc=' },
+    public: {
+      authJs: {
+        verifyClientOnEveryRequest: true,
+        baseUrl: '' // TODO: Production URL
+      }
+    }
+  }
 })
