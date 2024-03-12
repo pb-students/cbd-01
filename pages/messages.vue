@@ -79,6 +79,7 @@ const deleteMessage = (index: number) => {
             color="gray"
             size="xl"
             icon="i-heroicons-paper-airplane"
+            @click="sendMessage"
           />
         </div>
       </div>
