@@ -36,6 +36,9 @@ export default defineEventHandler(async (event) => {
   }
 
   return db.update(messages)
-    .set(data.data)
+    .set({
+      ...data.data,
+      updatedAt: new Date().toISOString()
+    })
     .where(eq(messages.id, +id))
 })

@@ -1,10 +1,25 @@
-import { db, messages, messageSchema } from '~/db'
+import { db, users, userSchema, messages, messageSchema, canEdit } from '~/db'
+import { desc } from 'drizzle-orm'
 import { z } from 'zod'
+
+const PAGE_SIZE = 1000
 
 export default defineEventHandler(async (event) => {
   const querySchema = z.object({
-    page: z.number().default(0)
+    page: z.coerce.number().default(0)
   })
+
+  const fullUserSchema = userSchema
+    .omit({ password: true })
+    .extend({ id: z.number() })
+
+  const fullMessageSchema = messageSchema
+    .extend({
+      createdAt: z.coerce.date(),
+      id: z.number(),
+      user: fullUserSchema,
+      editors: z.array(fullUserSchema)
+    })
 
   const validator = await getValidatedQuery(event, body => querySchema.safeParse(body))
   if (!validator.success) throw validator.error
@@ -12,10 +27,32 @@ export default defineEventHandler(async (event) => {
 
   const paginatedMessages = db.select()
     .from(messages)
-    .orderBy(messages.createdAt)
-    .limit(10)
-    .offset(10 * query.page)
+    .orderBy(desc(messages.createdAt))
+    .limit(PAGE_SIZE)
+    .offset(PAGE_SIZE * query.page)
     .all()
 
-  return paginatedMessages.map(msg => messageSchema.parse(msg))
+  const allUsers = db.select()
+    .from(users)
+    .all()
+    .reduce<Record<number, any>>((acc, user) => {
+      acc[user.id] = user
+      return acc
+    }, {})
+
+  const editors = db.select()
+    .from(canEdit)
+    .all()
+    .reduce<Record<number, any>>((acc, editor) => {
+      if (!editor.messageId || !editor.userId) return acc
+      acc[editor.messageId] ??= []
+      acc[editor.messageId].push(allUsers[editor.userId])
+      return acc
+    }, {})
+
+  return paginatedMessages.map(msg => fullMessageSchema.parse({
+    ...msg,
+    user: allUsers[msg.userId ?? 0],
+    editors: editors[msg.id] ?? []
+  }))
 })

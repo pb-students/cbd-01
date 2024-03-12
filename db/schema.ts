@@ -5,7 +5,7 @@ import { z } from 'zod'
 export const messageSchema = z.object({
   userId: z.number(),
   message: z.string(),
-  updatedAt: z.date()
+  updatedAt: z.coerce.date().nullable()
 })
 
 export const canEditSchema = z.object({
