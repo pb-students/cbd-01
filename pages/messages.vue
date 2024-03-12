@@ -25,6 +25,7 @@ const messages = reactive([
 
 const scroll = ref<HTMLElement | null>(null)
 const sendMessage = () => {
+  if (currentMessage.value === '') return
   // TODO: Add current logged user's id instead of 2
   messages.push({ userId: 2, message: currentMessage.value })
   currentMessage.value = ''
