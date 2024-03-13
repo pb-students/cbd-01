@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Message } from '~/types'
-
 const props = defineProps<{
   message: Message
 }>()
@@ -29,7 +28,7 @@ const canEdit = computed(() => props.message.userId === +user.value!.id || props
   <div class="flex pl-10">
     <div
       v-if="!isEditing"
-      :class="[message.user.id !== +user!.id ? 'bg-gray-600' : 'bg-cyan-600 ml-auto']"
+      :class="[message.user.id !== +user!.id ? ' bg-slate-200 dark:bg-gray-600' : 'bg-cyan-200 dark:bg-cyan-500 ml-auto']"
       class="p-4 my-2 w-64 h-full rounded-lg"
     >
       <div class="text-sm font-bold">
@@ -39,7 +38,7 @@ const canEdit = computed(() => props.message.userId === +user.value!.id || props
     </div>
     <div
       v-else
-      :class="[message.user.id !== +user!.id ? 'bg-gray-600' : 'bg-cyan-600 ml-auto']"
+      :class="[message.user.id !== +user!.id ? 'bg-gray-200 dark:bg-gray-600' : 'bg-cyan-200 dark:bg-cyan-500 ml-auto']"
       class="p-4 my-2 w-64 h-full rounded-lg"
     >
       <UTextarea

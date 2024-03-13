@@ -7,7 +7,7 @@ definePageMeta({
 })
 
 const colorMode = useColorMode()
-colorMode.value = 'dark'
+colorMode.value = 'light'
 
 // Polling users
 const { data: users, refresh: refreshUsers } = await useFetch('/api/users')
@@ -38,7 +38,6 @@ const scrollDown = () => {
 }
 
 scrollDown()
-
 
 watch(messages, async () => {
   if (arrivedState.bottom) {
@@ -80,15 +79,15 @@ const deleteMessage = async (message: Message) => {
 </script>
 
 <template>
-  <div class="flex gap-4 justify-center items-center w-full min-h-screen bg-gray-850">
-    <div class="rounded-xl shadow-xl w-[960px] h-[550px] bg-zinc-900 pb-[135px]">
+  <div class="flex gap-4 justify-center items-center w-full min-h-screen light:bg-gray-200 dark:bg-gray-850">
+    <div class="rounded-xl shadow-xl w-[960px] h-[550px] light:border-[1px] light:border-gray bg-white dark:bg-zinc-900 pb-[135px]">
       <div class="py-3 px-10 font-sans text-lg">
         Konspiracja PB
       </div>
       <div class="p-5 w-full h-full border-t-[1px] border-gray">
         <div
           ref="scroll"
-          class="overflow-y-auto mb-4 w-full h-full rounded-lg shadow-md bg-zinc-950"
+          class="overflow-y-auto mb-4 w-full h-full rounded-lg shadow-md bg-zinc-50 dark:bg-zinc-950"
         >
           <div
             v-for="message in messages"
@@ -119,7 +118,7 @@ const deleteMessage = async (message: Message) => {
       </div>
       <div />
     </div>
-    <div class="rounded-xl bg-zinc-900 h-[550px] w-[400px]">
+    <div class="rounded-xl bg-white light:border-[1px] light:border-gray shadow-xl dark:bg-zinc-900 h-[550px] w-[400px]">
       <div class="py-3 px-10 font-sans text-lg">
         Uczestnicy czatu
       </div>
