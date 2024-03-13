@@ -95,6 +95,7 @@ const deleteMessage = async (message: Message) => {
           >
             <Message
               :message="message"
+              :users="users"
               @update-message="updateMessage($event, message)"
               @delete-message="deleteMessage(message)"
             />
