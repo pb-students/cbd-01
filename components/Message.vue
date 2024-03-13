@@ -1,14 +1,14 @@
 <script setup lang="ts">
-const props = defineProps(['message'])
-const emit = defineEmits(['updateMessage', 'deleteMessage'])
-// TODO: fetch users from the backend
-const users = reactive([
-  { id: 1, username: 'Ula Kużelewska', canEdit: false },
-  { id: 2, username: 'Mateusz Daniel', canEdit: false },
-  { id: 3, username: 'Kasper Serweryn', canEdit: false }
-])
+import type { Message } from '~/types'
 
-const user = computed(() => users.find((user) => user.id === props.message.userId))
+const props = defineProps<{
+  message: Message
+}>()
+
+const { user } = useAuth()
+
+const emit = defineEmits(['updateMessage', 'deleteMessage'])
+
 const isEditing = ref(false)
 const isDeleting = ref(false)
 const deleteMessage = () => {
@@ -20,32 +20,40 @@ const deleteMessage = () => {
   emit('deleteMessage')
   isDeleting.value = false
 }
+
+const edit = ref(props.message.message)
+
+const canEdit = computed(() => props.message.userId === +user.value!.id || props.message.editors.some(editor => editor.id === +user.value!.id))
 </script>
 <template>
-  <div class="flex w-full h-min justify-end">
+  <div class="flex pl-10">
     <div
       v-if="!isEditing"
-      class="w-64 h-full rounded-lg bg-cyan-600 my-2 p-4"
+      :class="[message.user.id !== +user!.id ? 'bg-gray-600' : 'bg-cyan-600 ml-auto']"
+      class="p-4 my-2 w-64 h-full rounded-lg"
     >
-      <div class="font-bold text-sm">
-        {{ user?.username }}
+      <div class="text-sm font-bold">
+        {{ message.user.username }}
       </div>
       {{ message.message }}
     </div>
     <div
       v-else
-      class="w-64 h-full rounded-lg bg-cyan-600 my-2 p-4"
+      :class="[message.user.id !== +user!.id ? 'bg-gray-600' : 'bg-cyan-600 ml-auto']"
+      class="p-4 my-2 w-64 h-full rounded-lg"
     >
       <UTextarea
-        :value="message.message"
-        class="w-full h-min mr-2"
+        v-model="edit"
+        class="mr-2 w-full h-min"
         variant="outline"
         placeholder="Wpisz wiadomość"
-        @update:model-value="emit('updateMessage', $event)"
-        @keyup.enter="isEditing = false"
+        @keydown.enter.prevent="() => { emit('updateMessage', edit); isEditing = false }"
       />
     </div>
-    <div class="mr-10 p-2 w-min">
+    <div
+      v-if="canEdit"
+      class="p-2 mr-10 w-min"
+    >
       <UButton
         class="mr-2 mb-2"
         color="gray"

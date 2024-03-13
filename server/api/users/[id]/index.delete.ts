@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
   if (!id) throw new Error('No id provided')
 
-  const user = db.delete(users).where(eq(users.id, +id))
+  const user = await db.delete(users).where(eq(users.id, +id))
   if (!user) throw new Error('No user found')
 
   return userSchema.omit({ password: true }).parse(user)

@@ -16,7 +16,7 @@ export default defineNuxtConfig({
     public: {
       authJs: {
         verifyClientOnEveryRequest: true,
-        baseUrl: '' // TODO: Production URL
+        baseUrl: process.env.NUXT_NEXTAUTH_URL
       }
     }
   }

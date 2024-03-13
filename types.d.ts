@@ -19,4 +19,6 @@ declare module '@auth/core/jwt' {
   }
 }
 
+export type { Message } from '~/server/api/messages/index.get'
+
 export {}

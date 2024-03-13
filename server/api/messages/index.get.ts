@@ -4,23 +4,25 @@ import { z } from 'zod'
 
 const PAGE_SIZE = 1000
 
-export default defineEventHandler(async (event) => {
-  const querySchema = z.object({
-    page: z.coerce.number().default(0)
+const querySchema = z.object({
+  page: z.coerce.number().default(0)
+})
+
+const fullUserSchema = userSchema
+  .omit({ password: true })
+  .extend({ id: z.number() })
+
+const fullMessageSchema = messageSchema
+  .extend({
+    createdAt: z.coerce.date(),
+    id: z.number(),
+    user: fullUserSchema,
+    editors: z.array(fullUserSchema)
   })
 
-  const fullUserSchema = userSchema
-    .omit({ password: true })
-    .extend({ id: z.number() })
+export type Message = z.infer<typeof fullMessageSchema>
 
-  const fullMessageSchema = messageSchema
-    .extend({
-      createdAt: z.coerce.date(),
-      id: z.number(),
-      user: fullUserSchema,
-      editors: z.array(fullUserSchema)
-    })
-
+export default defineEventHandler(async (event) => {
   const validator = await getValidatedQuery(event, body => querySchema.safeParse(body))
   if (!validator.success) throw validator.error
   const query = validator.data

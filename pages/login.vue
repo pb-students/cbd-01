@@ -4,10 +4,14 @@ import { z } from 'zod'
 
 import type { FormSubmitEvent } from '#ui/types'
 
-const { signIn, user } = useAuth()
+definePageMeta({
+  middleware: 'guest-only',
+  auth: { authenticatedRedirectTo: '/' }
+})
+
+const { signIn } = useAuth()
 
 const router = useRouter()
-if (user.value) router.replace('/')
 
 const credentialsSchema = userSchema.pick({
   username: true,
