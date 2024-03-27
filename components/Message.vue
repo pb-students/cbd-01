@@ -1,29 +1,43 @@
 <script setup lang="ts">
 import type { Message } from '~/types'
+interface User {
+  id: number
+  username: string
+}
+
 const props = defineProps<{
   message: Message
-  users: any
+  users: User[]
 }>()
 
 const emit = defineEmits(['updateMessage', 'deleteMessage'])
-const message = toRef(props, 'message')
 const { user } = useAuth()
-const users = toRef(props, 'users')
 const isModalOpen = ref(false)
+const users = toRef(props, 'users')
+const message = toRef(props, 'message')
 
 const userEdits = computed(() => {
   return users.value.reduce((acc, user) => {
-    acc[user.id] = false
+    if (message.value.editors[user.id]) acc[user.id] = true
+    else acc[user.id] = false
     return acc
-  }, {})
+  }, {} as Record<number, boolean>)
 })
 
 watchEffect(() => {
-  const editors = Object.keys(userEdits.value).filter(id => userEdits.value[id] === true)
-  console.log(editors)
-  message.value.editors = editors
-  console.log(message.value)
+  const editorsId = Object.keys(userEdits.value).filter((id) => userEdits.value[id] === true)
+  const editors = users.value.filter((user: User) => editorsId.includes(user.id.toString()))
+  emit('updateMessage', {
+    userId: message.value.userId,
+    message: message.value.message,
+    editors,
+    id: message.value.id,
+    user: message.value.user,
+    createdAt: message.value.createdAt,
+    updatedAt: message.value.updatedAt
+  })
 })
+
 const isEditing = ref(false)
 const isDeleting = ref(false)
 const deleteMessage = () => {

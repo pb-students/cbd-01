@@ -1,7 +1,7 @@
 import type { DefaultUser } from '@auth/core/types'
 
 declare module '@auth/core/types' {
-  interface User extends Omit<DefaultUser, 'id'> {
+  export interface User extends Omit<DefaultUser, 'id'> {
     id: number
     username: string
   }
