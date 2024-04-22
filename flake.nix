@@ -13,8 +13,8 @@
         pkgs = nixpkgs.legacyPackages.${system};
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
-            nodejs_18
-            corepack_18
+            nodejs
+            corepack
             sqlite
           ];
         };

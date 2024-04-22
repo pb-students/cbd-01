@@ -23,12 +23,22 @@ export const users = sqliteTable('users', {
   id: integer('id').primaryKey(),
   username: text('username').notNull(),
   password: text('password').notNull(),
+  maxFailedAttempts: integer('max_failed_attempts').notNull().default(99999),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`)
+})
+
+export const loginAttempts = sqliteTable('login_attempts', {
+  id: integer('id').primaryKey(),
+  userId: integer('user_id').references(() => users.id, { onDelete: 'cascade' }),
+  username: text('username').notNull(),
+  failed: integer('failed', { mode: 'boolean' }).default(false).notNull(),
+  failedAttempts: integer('failed_attempts').default(0).notNull(),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`)
 })
 
 export const messages = sqliteTable('messages', {
   id: integer('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   message: text('message').notNull(),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at')
@@ -36,6 +46,6 @@ export const messages = sqliteTable('messages', {
 
 export const canEdit = sqliteTable('can_edit', {
   id: integer('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id),
-  messageId: integer('message_id').references(() => messages.id)
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  messageIduserId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' })
 })

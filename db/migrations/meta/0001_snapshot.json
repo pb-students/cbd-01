@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "f59dfbcb-e802-4457-a709-a0b2a553ea35",
-  "prevId": "7e4d395a-df1c-4ddf-8ae5-c40cc295410e",
+  "id": "4e7d2572-0759-4498-a202-b885d97763f0",
+  "prevId": "1eaedd61-7f90-424b-a1d4-65662ff050d1",
   "tables": {
     "can_edit": {
       "name": "can_edit",
@@ -18,14 +18,7 @@
           "name": "user_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "message_id": {
-          "name": "message_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
@@ -41,20 +34,75 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "login_attempts": {
+      "name": "login_attempts",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
         },
-        "can_edit_message_id_messages_id_fk": {
-          "name": "can_edit_message_id_messages_id_fk",
-          "tableFrom": "can_edit",
-          "tableTo": "messages",
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "failed": {
+          "name": "failed",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "failed_attempts": {
+          "name": "failed_attempts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "login_attempts_user_id_users_id_fk": {
+          "name": "login_attempts_user_id_users_id_fk",
+          "tableFrom": "login_attempts",
+          "tableTo": "users",
           "columnsFrom": [
-            "message_id"
+            "user_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -75,7 +123,7 @@
           "name": "user_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "message": {
@@ -113,7 +161,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -143,6 +191,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "max_failed_attempts": {
+          "name": "max_failed_attempts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 99999
         },
         "created_at": {
           "name": "created_at",

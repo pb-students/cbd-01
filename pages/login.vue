@@ -16,7 +16,7 @@ const router = useRouter()
 const credentialsSchema = userSchema.pick({
   username: true,
   password: true
-})
+}).required()
 
 type Credentials = z.infer<typeof credentialsSchema>
 
@@ -27,15 +27,20 @@ const state: Credentials = reactive({
 
 const form = ref()
 
+const loading = ref(false)
 const login = async (event: FormSubmitEvent<Credentials>) => {
+  loading.value = true
   try {
     await signIn('credentials', event.data)
     router.replace('/')
-  } catch (_) {
+  } catch (err) {
+    console.error(err)
     form.value.setErrors(Object.keys(event.data).map(path => ({
       path,
-      message: 'Invalid credentials'
+      message: (err as Error).message ?? 'Invalid credentials'
     })))
+  } finally {
+    loading.value = false
   }
 }
 </script>
@@ -51,6 +56,7 @@ const login = async (event: FormSubmitEvent<Credentials>) => {
     <UFormGroup
       label="Email"
       name="username"
+      required
     >
       <UInput v-model="state.username" />
     </UFormGroup>
@@ -58,6 +64,7 @@ const login = async (event: FormSubmitEvent<Credentials>) => {
     <UFormGroup
       label="Password"
       name="password"
+      required
     >
       <UInput
         v-model="state.password"
@@ -65,7 +72,7 @@ const login = async (event: FormSubmitEvent<Credentials>) => {
       />
     </UFormGroup>
 
-    <UButton type="submit">
+    <UButton type="submit" :loading="loading">
       Submit
     </UButton>
   </UForm>
