@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { userSchema } from '~/db/schema'
+import { credentialsSchema } from '~/db/schema'
 import { z } from 'zod'
 
 import type { FormSubmitEvent } from '#ui/types'
@@ -13,13 +13,7 @@ const { signIn } = useAuth()
 
 const router = useRouter()
 
-const credentialsSchema = userSchema.pick({
-  username: true,
-  password: true
-}).required()
-
 type Credentials = z.infer<typeof credentialsSchema>
-
 const state: Credentials = reactive({
   username: '',
   password: ''

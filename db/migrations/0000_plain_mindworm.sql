@@ -23,10 +23,18 @@ CREATE TABLE `messages` (
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE TABLE `partial_passwords` (
+	`id` integer PRIMARY KEY NOT NULL,
+	`user_id` integer NOT NULL,
+	`hashed_password` text NOT NULL,
+	`k` integer NOT NULL,
+	`i` integer NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
 CREATE TABLE `users` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`username` text NOT NULL,
-	`password` text NOT NULL,
-	`max_failed_attempts` integer DEFAULT 0 NOT NULL,
+	`max_failed_attempts` integer DEFAULT 99999 NOT NULL,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP
 );

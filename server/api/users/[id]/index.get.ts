@@ -8,5 +8,5 @@ export default defineEventHandler(async (event) => {
     .where(eq(users.id, +id))
     .get()
 
-  return userSchema.omit({ password: true }).parse(user)
+  return userSchema.parse(user)
 })

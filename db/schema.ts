@@ -16,13 +16,16 @@ export const canEditSchema = z.object({
 export const userSchema = z.object({
   id: z.number(),
   username: z.string(),
-  password: z.string()
+})
+
+export const credentialsSchema = z.object({
+  username: z.string(),
+  password: z.string(),
 })
 
 export const users = sqliteTable('users', {
   id: integer('id').primaryKey(),
   username: text('username').notNull(),
-  password: text('password').notNull(),
   maxFailedAttempts: integer('max_failed_attempts').notNull().default(99999),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`)
 })
@@ -48,4 +51,12 @@ export const canEdit = sqliteTable('can_edit', {
   id: integer('id').primaryKey(),
   userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   messageIduserId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' })
+})
+
+export const partialPasswords = sqliteTable('partial_passwords', {
+  id: integer('id').primaryKey(),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  hashedPassword: text('hashed_password').notNull(),
+  k: integer('k').notNull(),
+  i: integer('i').notNull(),
 })

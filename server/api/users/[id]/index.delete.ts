@@ -7,5 +7,5 @@ export default defineEventHandler(async (event) => {
   const user = await db.delete(users).where(eq(users.id, +id))
   if (!user) throw new Error('No user found')
 
-  return userSchema.omit({ password: true }).parse(user)
+  return userSchema.parse(user)
 })

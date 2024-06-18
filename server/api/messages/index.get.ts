@@ -8,16 +8,12 @@ const querySchema = z.object({
   page: z.coerce.number().default(0)
 })
 
-const fullUserSchema = userSchema
-  .omit({ password: true })
-  .extend({ id: z.number() })
-
 const fullMessageSchema = messageSchema
   .extend({
     createdAt: z.coerce.date(),
     id: z.number(),
-    user: fullUserSchema,
-    editors: z.array(fullUserSchema)
+    user: userSchema,
+    editors: z.array(userSchema)
   })
 
 export type Message = z.infer<typeof fullMessageSchema>

@@ -3,17 +3,12 @@ import type { User } from '@auth/core/types'
 import type { AuthConfig } from '@auth/core'
 import { CredentialsSignin } from '@auth/core/errors'
 import { NuxtAuthHandler } from '#auth'
-import { db, users, userSchema, loginAttempts } from '~/db'
+import { db, users, credentialsSchema, userSchema, loginAttempts } from '~/db'
 import { eq, desc } from 'drizzle-orm'
 
 const DELAY_BASE_MS = 5000
 
 const runtimeConfig = useRuntimeConfig()
-
-const credentialsSchema = userSchema.pick({
-  username: true,
-  password: true
-})
 
 class TooManyAttemptsError extends CredentialsSignin {
   code = 'Too many login attempts, account locked'

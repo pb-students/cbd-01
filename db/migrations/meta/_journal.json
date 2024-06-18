@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1713778973487,
-      "tag": "0000_sloppy_machine_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1713796986921,
-      "tag": "0001_ordinary_radioactive_man",
+      "when": 1713805776013,
+      "tag": "0000_plain_mindworm",
       "breakpoints": true
     }
   ]
